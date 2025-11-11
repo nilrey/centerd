@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16.1
+    container_name: centerd-database
+    environment:
+      POSTGRES_DB: eif_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+    networks:
+      - center-django-net
+  
+  pgadmin4:
+    image: dpage/pgadmin4
+    container_name: centerd-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@server.com
+      - PGADMIN_DEFAULT_PASSWORD=12345678
+      #- PGADMIN_DEFAULT_PORT=8880
+    ports:
+      - "8086:80" # Порт для доступа к вашему приложению Порт_внешний:Порт_контейнера
+    depends_on:
+      - postgres
+    networks:
+      - center-django-net
+
+volumes:
+  db-data:
+
+networks:
+  center-django-net:
+    driver: bridge
