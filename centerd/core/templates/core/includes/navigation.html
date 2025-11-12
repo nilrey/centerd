@@ -1,0 +1,12 @@
+<nav class="main-nav">
+    <ul>
+        <li><a href="{% url 'home' %}">Главная</a></li>
+        <li><a href="{% url 'organizations:list' %}">Организации</a></li>
+        {% comment %} <li><a href="{% url 'products:list' %}">Каталог товаров</a></li>
+        <li><a href="{% url 'messenger:list' %}">Мессенджер</a></li>
+        <li><a href="{% url 'about' %}">О нас</a></li>
+        {% endcomment %}
+        {# <li><a href="{% url 'contact' %}">Контакты</a></li>#}
+        
+    </ul>
+</nav>

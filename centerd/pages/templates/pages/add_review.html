@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Добавить отзыв{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Добавить отзыв</h1>
+    
+    <!-- Сообщения -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="post" class="review-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="review_text">Ваш отзыв:</label>
+            <textarea name="review_text" id="review_text" rows="5" 
+                     placeholder="Поделитесь вашим мнением..." 
+                     class="form-control" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+        <a href="{% url 'reviews' %}" class="btn btn-secondary">Посмотреть все отзывы</a>
+    </form>
+</div>
+{% endblock %}

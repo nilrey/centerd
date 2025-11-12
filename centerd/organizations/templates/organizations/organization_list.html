@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Список организаций{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Список организаций</h1>
+    
+    {% if organizations %}
+        <div class="organization-grid">
+            {% for organization in organizations %}
+                <div class="organization-card">
+                    <h3>{{ organization.name }}</h3>
+                    <p>{{ organization.description|truncatewords:20 }}</p>
+                    <div class="organization-actions">
+                        <a href="{% url 'organizations:detail' organization.pk %}" class="btn btn-primary">Паспорт</a>
+                        <a href="{% url 'organizations:card' organization.pk %}" class="btn btn-secondary">Карточка</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Организации пока не добавлены.</p>
+    {% endif %}
+</div>
+{% endblock %}

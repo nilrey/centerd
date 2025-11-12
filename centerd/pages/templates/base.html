@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Мой сайт{% endblock %}</title>
+    
+    <!-- Подключение статических файлов -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'pages/css/style.css' %}">
+    <script src="{% static 'pages/js/script.js' %}" defer></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="{% url 'home' %}" class="nav-logo">МойСайт</a>
+                <ul class="nav-menu">
+                    <li><a href="{% url 'home' %}" class="nav-link">Главная</a></li>
+                    <li><a href="{% url 'about' %}" class="nav-link">О нас</a></li>
+                    <li><a href="{% url 'reviews' %}" class="nav-link">Отзывы</a></li>
+                    <li><a href="{% url 'contact' %}" class="nav-link">Контакты</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        {% block content %}
+        <!-- Содержимое будет подставляться из дочерних шаблонов -->
+        {% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Мой сайт. Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>

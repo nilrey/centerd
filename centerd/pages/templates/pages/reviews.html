@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Все отзывы{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Отзывы наших клиентов</h1>
+    
+    <div class="reviews-header">
+        <a href="{% url 'add_review' %}" class="btn btn-primary">Добавить отзыв</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary">На главную</a>
+    </div>
+    
+    {% if all_reviews %}
+        <div class="reviews-list">
+            {% for review in all_reviews %}
+                <div class="review-card">
+                    <div class="review-text">{{ review.text }}</div>
+                    <div class="review-date">
+                        {{ review.created_date|date:"d.m.Y H:i" }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-reviews">
+            <p>Пока нет отзывов. Будьте первым!</p>
+            <a href="{% url 'add_review' %}" class="btn btn-primary">Добавить отзыв</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

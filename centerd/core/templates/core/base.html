@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Бизнес-портал{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+</head>
+<body>
+    {% include 'core/includes/header.html' %}
+    {% include 'core/includes/navigation.html' %}
+    
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    {% include 'core/includes/footer.html' %}
+</body>
+</html>

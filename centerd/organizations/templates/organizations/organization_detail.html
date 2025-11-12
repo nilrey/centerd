@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Паспорт организации - {{ organization.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Паспорт организации: {{ organization.name }}</h1>
+    
+    <nav class="sub-nav">
+        <a href="{% url 'organizations:card' organization.pk %}">Карточка</a>
+        <a href="{% url 'organizations:management' organization.pk %}">Руководство</a>
+        <a href="{% url 'organizations:documents' organization.pk %}">Документы</a>
+        <a href="{% url 'organizations:systems' organization.pk %}">Системы</a>
+        <a href="{% url 'organizations:contacts' organization.pk %}">Контакты</a>
+    </nav>
+    
+    <div class="organization-info">
+        <h2>Основная информация</h2>
+        <p><strong>Название:</strong> {{ organization.name }}</p>
+        <p><strong>Описание:</strong> {{ organization.description }}</p>
+        <p><strong>Дата создания:</strong> {{ organization.created_date|date:"d.m.Y" }}</p>
+    </div>
+</div>
+{% endblock %}
