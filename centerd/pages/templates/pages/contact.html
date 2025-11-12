@@ -1,16 +1,52 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Контакты</title>
-</head>
-<body>
-    <h1>Наши контакты</h1>
-    <nav>
-        <a href="/">Главная</a> |
-        <a href="/about/">О нас</a> |
-        <a href="/contact/">Контакты</a>
-    </nav>
-    <p>Email: info@example.com</p>
-    <p>Телефон: +7 (123) 456-78-90</p>
-</body>
-</html>
+{% extends 'core/base.html' %}
+
+{% block title %}Контакты. Сообщения{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Контакты. Сообщения</h1>
+    
+    <!-- Сообщения -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Форма отзыва -->
+    <section class="review-section">
+        <h2>Оставьте ваш отзыв</h2>
+        <form method="post" class="review-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <textarea name="review_text" rows="4" 
+                         placeholder="Поделитесь вашим мнением о нашем сайте..." 
+                         class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+        </form>
+        <p><a href="{% url 'add_review' %}">Подробная форма отзыва</a> | 
+           <a href="{% url 'reviews' %}">Посмотреть все отзывы</a></p>
+    </section>
+    
+    <!-- Последние отзывы -->
+    {% if recent_reviews %}
+        <section class="recent-reviews">
+            <h2>Последние отзывы</h2>
+            <div class="reviews-grid">
+                {% for review in recent_reviews %}
+                    <div class="review-card">
+                        <div class="review-text">{{ review.text }}</div>
+                        <div class="review-date">
+                            {{ review.created_date|date:"d.m.Y H:i" }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <a href="{% url 'reviews' %}" class="btn btn-secondary">Все отзывы</a>
+        </section>
+    {% endif %}
+</div>
+{% endblock %}

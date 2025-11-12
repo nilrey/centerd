@@ -1,0 +1,58 @@
+
+.table tr td {
+  vertical-align: top;
+}
+
+.table-info tr td:first-child {
+  width:  250px;
+}
+.content_wrapper{
+    max-height: 25px;
+    overflow: hidden;
+}
+.content_wrapper_show{
+    max-height: none;
+    overflow: none;
+}
+.contentScrollShow { margin: 5px 0px 5px 0px; color: #1864ab; cursor: pointer; font-size: 12px;}
+.contentScrollShow::before{
+    content: 'Развернуть текст';
+}
+.contentScrollHide::before{
+    content: 'Свернуть текст'
+}
+.contentScrollShow::after{
+    content: '\f078';
+    font-family: FontAwesome;
+    margin-left:35px;
+    color: #4DABF7;
+    font-size: 11px
+}
+.contentScrollHide::after{
+    content: '\f077';
+    font-family: FontAwesome;
+    margin-left:48px;
+    color: #4DABF7;
+    font-size: 11px
+}
+.contentScrollShowAll { color: #1864ab; cursor: pointer; font-size: 12px;}
+.contentScrollShowAll::before{
+    content: 'Развернуть всё'
+}
+.contentScrollHideAll::before{
+    content: 'Свернуть всё'
+}
+.contentScrollShowAll::after{
+    content: '\f078';
+    font-family: FontAwesome;
+    margin-left:35px;
+    color: #4DABF7;
+    font-size: 11px
+}
+.contentScrollHideAll::after{
+    content: '\f077';
+    font-family: FontAwesome;
+    margin-left:48px;
+    color: #4DABF7;
+    font-size: 11px
+}

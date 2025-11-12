@@ -1,0 +1,238 @@
+
+#table_div{
+	margin-top: 0px;
+}
+
+
+													/* dataTables length, filter */
+
+.dataTables_length, .dataTables_filter {
+	height: 45px;
+}
+.dataTables_length label {
+	margin-top: 7px;
+	margin-bottom: 8px;
+	font-weight: 500;
+}
+
+.col-sm-6{
+	padding: 0px;
+}
+
+.dataTables_filter {
+	text-align: left;
+	margin: 0px;
+}
+
+.dataTables_filter input[type="search"]{
+	width: 100%;
+	margin: 0px 0px 5px 0px;
+	/*height: 45px;*/
+	font-size: 14px;
+	font-style: italic;
+	font-weight: 500;
+	border: 1px solid #555555;
+	color: #555555;
+	border-radius: 0px;
+}
+
+
+.dataTables_filter,
+.dTable_wrapper row,
+#dTable_filter label,
+.col-sm-6{
+	width: 100%;
+}
+
+div.dataTables_filter label {
+	display: inline;
+}
+
+													/* dataTables table */
+
+.dataTable{
+	width: 100% !important;
+}
+
+.dataTable > tbody > tr > td > .fa,
+.dataTable > tbody > tr > td > a > i.fa,
+.dataTable > tbody > tr > td > .glyphicon,
+.dataTable > tbody > tr > td > a > i.glyphicon
+{
+	border: 1px solid #58595b;
+	padding: 5px;
+	color: #555555;
+	vertical-align: middle;
+}
+
+.dataTable > tbody > tr > td > a{
+	color: #555555;
+}
+
+
+.dataTable{
+	color: #58595b;
+	border-left: 0px !important;
+	border-top: 0px !important;
+	border-right: 1px solid #555555 !important;
+	border-bottom: 1px solid #555555 !important;
+	margin: 0px !important;
+}
+
+
+table.dataTable {
+	margin-top: 0px !important;
+	margin-bottom: 0px !important;
+}
+
+.dataTable th,
+.dataTable td{
+	border-right: 0px !important;
+	border-bottom: 0px !important;
+	border-left: 1px solid #555555 !important;
+	border-top: 1px solid #555555 !important;
+	vertical-align: top !important;
+}
+
+.dataTable > thead{
+	background: #CCCACB;
+}
+
+.dataTable > thead > tr {
+	min-height: 45px;
+}
+
+.dataTable > thead > tr > th,
+.dataTable > tbody > tr > td
+{
+	border: 0px;
+	font-size: 14px;
+	line-height: 28px;
+}
+.dataTable > thead > tr > th{
+	font-size: 12px;
+}
+
+table.dataTable thead th{
+	min-width: 50px;
+}
+
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc {
+	cursor: pointer;
+}
+
+table.dataTable thead .sorting::after,
+table.dataTable thead .sorting_asc::after,
+table.dataTable thead .sorting_desc::after {
+    font-family: fontawesome;
+	cursor: pointer;
+}
+
+table.dataTable thead .sorting_asc::after {
+    content: "\f160" !important;
+}
+
+table.dataTable thead .sorting_desc::after {
+    content: "\f161" !important;
+}
+
+table.dataTable thead .sorting::after {
+    content: "" !important;
+}
+
+table.dataTable tbody tr td:last-child ul,
+table.dataTable tbody tr td:last-child .icons-action-list{
+	white-space: nowrap;
+	padding: 0px;
+	margin: 0px;
+	text-align: center
+}
+
+.icons-action-list a{
+	text-decoration: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.icons-action-list a i,
+.icons-action-list i {
+	padding: 6px;
+	color: #555555;
+	border: 1px solid #555555 !important;
+	background: #FFF;
+	cursor: pointer;
+}
+.icons-action-list a i:hover,
+.icons-action-list i:hover {
+	background: #E6E6E6;
+}
+
+.foiv-table-tip{
+	color: #296DAA !important;
+	border: 0px !important;
+	float: right !important;
+	margin-top: 2px;
+	cursor: default;
+}
+
+													/* dataTables paginate */
+
+div.dataTables_wrapper > .row > .col-sm-5,
+div.dataTables_wrapper > .row > .col-sm-7{
+	width: 100% !important;
+	height: 45px;
+}
+
+div.dataTables_info {
+	padding-top: 13px;
+}
+
+div.dataTables_paginate ul.pagination {
+	margin-top: 0px !important;;
+	display: block;
+}
+
+div.dataTables_paginate ul.pagination > li.previous > a > i.glyphicon-triangle-left,
+div.dataTables_paginate ul.pagination > li.next > a > i.glyphicon-triangle-right {
+	top: 2px;
+}
+
+.pagination > li.disabled,
+.pagination > li > a,
+.pagination > li > span {
+	border-radius: 0px !important;
+	border-color: #555555 !important;
+	color: #555555 !important;
+}
+
+.pagination > li.disabled a{
+	color: #CCCACB !important;
+}
+
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+	background: #CCCACB !important;
+	background-color: #CCCACB !important;
+	border-color: #555555 !important;
+	color: #555555 !important;
+}
+
+
+													/* Mozzila FireFox hack */
+
+@-moz-document url-prefix() {
+	.dataTable > tbody > tr > td > a > i.fa-link{
+		padding-top: 6px !important;
+		padding-bottom: 4px !important;
+	}
+	
+	.dataTables_filter input[type="search"]{
+		margin-top: 0px;
+	}
+}

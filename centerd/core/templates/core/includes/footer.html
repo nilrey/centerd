@@ -1,0 +1,131 @@
+
+
+<!-- modalMainMenu -->
+<div class="modal fade" id="exampleModalFullscreen" tabindex="-1" aria-labelledby="modalMainMenu" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen" >
+    <div class="modal-content" style="background: #252B34">
+      <div class="modal-header" style="border-bottom: 0px">
+        <h5 class="modal-title" id="modalMainMenu">
+          <div style="margin: 40px">
+          	<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </h5>
+      </div>
+
+      <div style="margin: 0px auto;  margin-top: 5%;  max-width: 1180px"><div class="menu-plate" onclick="manageSubmenu('SubMenuLine1', this)"><span class="asPointer">Паспорта ФОИВ РФ / Субьектов РФ</span></div><div class="menu-plate" onclick="manageSubmenu('SubMenuLine4', this)"><span class="asPointer">Контроль и управление функционированием</span></div><div class="menu-plate"><a href="http://192.168.125.182/?login=open" target="_blank">ГИС МО</a></div></div><div id="SubMenuLine1" class="sub-menu" style="margin: 0px auto; display: none; max-width: 1180px"><div class="submenu-plate"><a href="/public/index.php/oiv" >ФОИВ РФ</a></div><div class="submenu-plate"><a href="/public/index.php/region" >Субьекты РФ</a></div><div class="submenu-plate"><a href="/public/index.php/stat" >Статистика</a></div><div class="submenu-plate"><a href="/public/index.php/search" >Поиск в паспортах ФОИВ РФ и Субъектов РФ</a></div></div><div id="SubMenuLine4" class="sub-menu" style="margin: 0px auto; display: none; max-width: 1180px"><div class="submenu-plate"><a href="/public/index.php/admin/menu" >Администрирование меню</a></div><div class="submenu-plate"><a href="/public/index.php/admin/users" >Администрирование пользователей</a></div><div class="submenu-plate"><a href="/public/index.php/admin/roles" >Администрирование ролей</a></div><div class="submenu-plate"><a href="/public/index.php/admin/syncpspoiv" >Синхронизация хранилищ паспортов ФОИВ</a></div><div class="submenu-plate"><a href="/public/index.php/func/rep_data_act_control" >Актуализация данных</a></div><div class="submenu-plate"><a href="/public/index.php/map/adm/map" >Выгрузка в ГИС</a></div><div class="submenu-plate"><a href="/public/index.php/eif/sources" >Данные</a></div><div class="submenu-plate"><a href="/public/index.php/foiv/0/foiv_systems" >Информационные системы</a></div><div class="submenu-plate"><a href="/public/index.php/service/services" >Регламентные задачи</a></div><div class="submenu-plate"><a href="/public/index.php/constructor" >Конструктор форм ввода данных</a></div></div><div style="margin: 0px auto;  max-width: 1180px"><div class="menu-plate"><a href="/public/index.php/webmail" >Электронная почта</a></div><div class="menu-plate"><a href="/public/index.php/webftp" >Служба передачи файлов</a></div><div class="menu-plate"><a href="http://192.168.125.64" target="_blank">Редактор обстановки</a></div></div> 
+
+
+
+
+    </div>
+  </div>
+</div>
+<!-- \ modalMainMenu -->
+
+<!-- Modal Message Info -->
+<div class="modal fade" id="dialog-modal-info" tabindex="-1" aria-labelledby="dialogModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" id="dialogModalHeader" style="background-color: #f0f8ff">
+        <h5 class="modal-title" id="dialogModalLabel">Инфо</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="dialog-msg-info" style="margin-bottom: 0px; "></div>
+      <div class="modal-footer" style="border-top: 0px; justify-content: center">
+        <button type="button" class="btn btn-light" style="border: 1px solid #1864AB; color:  #1864AB" data-bs-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- \ Modal Message Info -->
+
+<!-- Modal Confirm -->
+<div class="modal fade" id="dialog-modal-confirm" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #f0f8ff">
+        <h5 class="modal-title" id="confirmModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="dialog-msg-confirm" style="margin-bottom: 0px; "></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" id="dialog-modal-confirm-send" class="btn btn-primary">Отправить</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- \ Modal Form -->
+
+<!-- Modal Form -->
+<div class="modal fade" id="dialog-modal-form" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #f0f8ff">
+        <h5 class="modal-title" id="formModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="dialog-msg-form" style="margin-bottom: 0px; "></div>
+       <div class="modal-footer">
+        <button type="button" class="btn btn-primary" style="margin-right: 30px">Отправить</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- \ Modal Form -->
+
+
+
+
+<!-- Modal Help Info -->
+<div class="modal fade" id="dialog-modal-help" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 800px !important" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #f0f8ff">
+          <h5 class="modal-title" id="helpModalLabel">Интерактивная справка по изделию ПИ ИВ ИС ФОИВ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="dialog-lists-msg-form" style="margin-bottom: 0px; ">
+        
+          <div style="text-align: justify;">
+          <ul style="font-size: 18px; padding: 50px">
+            <li style="margin: 15px">Руководство оператора "Программный комплекс получения информации из внешних источников и размещения на хранение в тематической базе данных" (ПК ПИВИ РХ) 
+            <a target="_blank" href="/public/documents/help/ИТВБ_00538_01_34_01_Руководство_оператора_ПК_ПИВИ_РХ.odt">(Скачать odt)</a> 
+            <a target="_blank" href="/public/documents/help/ИТВБ_00538_01_34_01_Руководство_оператора_ПК_ПИВИ_РХ.pdf">(Скачать pdf)</a></li>
+            <li style="margin: 15px">Руководство оператора "Программный комплекс взаимодействия с магистралью информационного взаимодействия" (ПК ВМИВ) 
+            <a target="_blank" href="/public/documents/help/ИТВБ_00539_01_34_01_Руководство_оператора_ПК_ВМИВ.odt">(Скачать odt)</a> 
+            <a target="_blank" href="/public/documents/help/ИТВБ_00539_01_34_01_Руководство_оператора_ПК_ВМИВ.pdf">(Скачать pdf)</a></li>
+            <li style="margin: 15px">Руководство оператора "Программный комплекс актуализации информации о ФОИВ" (ПК АИ ФОИВ)
+            <a target="_blank" href="/public/documents/help/ИТВБ_00540_01_34_01_Руководство_оператора_ПК_АИ_ФОИВ.odt">(Скачать odt)</a> 
+            <a target="_blank" href="/public/documents/help/ИТВБ_00540_01_34_01_Руководство_оператора_ПК_АИ_ФОИВ.pdf">(Скачать pdf)</a></li>
+            <li style="margin: 15px">Руководство оператора "Программный комплекс организации пользовательских интерфейсов на АРМ должностных лиц" (ПК ОПИ АРМ)
+            <a target="_blank" href="/public/documents/help/ИТВБ_00541_01_34_01_Руководство_оператора_ПК_ОПИ_АРМ.odt">(Скачать odt)</a> 
+            <a target="_blank" href="/public/documents/help/ИТВБ_00541_01_34_01_Руководство_оператора_ПК_ОПИ_АРМ.pdf">(Скачать pdf)</a></li>
+
+            <li style="margin: 15px">Руководство оператора "Программный комплекс организации тематической базы данных" (ПК ОТБД)
+            <a target="_blank" href="/public/documents/help/ИТВБ_00542_01_34_01_Руководство_оператора_ПК_ОТБД.odt">(Скачать odt)</a> 
+            <a target="_blank" href="/public/documents/help/ИТВБ_00542_01_34_01_Руководство_оператора_ПК_ОТБД.pdf">(Скачать pdf)</a></li>
+          </ul>
+          </div>
+
+        </div>
+         <div class="modal-footer">
+          <span id="dialog-lists-msg-form-ok" style="margin-right: 30px"></span>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- \ Modal Help Info -->
+<script type="text/javascript">
+    function modalHelp(){
+        var modal = new bootstrap.Modal(document.getElementById('dialog-modal-help'), {});
+        //$('#dialog-lists-msg-form-ok').html(buttonOK);
+        //$('#listsFormModalLabel').html(header);
+        //$(".listOfList").prop('checked', false);
+
+        modal.show();
+    }
+</script>

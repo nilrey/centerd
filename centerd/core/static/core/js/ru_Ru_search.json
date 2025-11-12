@@ -1,0 +1,22 @@
+{
+    "sProcessing":   "Подождите...",
+    "sLengthMenu":   "Отображать на странице _MENU_",
+    "sZeroRecords":  "Записи отсутствуют.",
+    "sInfo":         "Записи с _START_ до _END_ из _TOTAL_ записей",
+    "sInfoEmpty":    "Записи с 0 до 0 из 0 записей",
+    "sInfoFiltered": "(отфильтровано из _MAX_ записей)",
+    "sInfoPostFix":  "",
+    "sSearch":       "",
+    "searchPlaceholder": "Фильтр по результатам...",
+    "sUrl":          "",
+    "oPaginate": {
+        "sFirst": "<i class='glyphicon glyphicon-step-backward'></i>",
+        "sPrevious": "<i class='glyphicon glyphicon-triangle-left'></i>",
+        "sNext": "<i class='glyphicon glyphicon-triangle-right'></i>",
+        "sLast": "<i class='glyphicon glyphicon-step-forward'></i>"
+    },
+    "oAria": {
+        "sSortAscending":  ": активировать для сортировки столбца по возрастанию",
+        "sSortDescending": ": активировать для сортировки столбцов по убыванию"
+    }
+}

@@ -1,12 +1,12 @@
-<nav class="main-nav">
-    <ul>
-        <li><a href="{% url 'home' %}">Главная</a></li>
-        <li><a href="{% url 'organizations:list' %}">Организации</a></li>
-        {% comment %} <li><a href="{% url 'products:list' %}">Каталог товаров</a></li>
-        <li><a href="{% url 'messenger:list' %}">Мессенджер</a></li>
-        <li><a href="{% url 'about' %}">О нас</a></li>
-        {% endcomment %}
-        {# <li><a href="{% url 'contact' %}">Контакты</a></li>#}
-        
-    </ul>
-</nav>
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="{% url 'home' %}" class="nav-logo">МойСайт</a>
+                <ul class="nav-menu">
+                    <li><a href="{% url 'home' %}" class="nav-link">Главная</a></li>
+                    <li><a href="{% url 'about' %}" class="nav-link">О нас</a></li>
+                    <li><a href="{% url 'organizations:list' %}" class="nav-link">Организации</a></li>
+                    <li><a href="{% url 'reviews' %}" class="nav-link">Отзывы</a></li>
+                    <li><a href="{% url 'contact' %}" class="nav-link">Контакты</a></li>
+                </ul>
+            </div>
+        </nav>

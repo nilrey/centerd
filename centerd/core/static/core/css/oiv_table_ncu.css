@@ -1,0 +1,21 @@
+
+table.form_ncu{
+	width: 100%;
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+}
+table.form_ncu td{
+	text-align: center;
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	padding: 5px;
+}
+.alignCenter{
+	text-align: center; !important;
+}
+.alignRight{
+	text-align: right !important;
+}
+.alignLeft{
+	text-align: left !important;
+}

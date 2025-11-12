@@ -1,0 +1,58 @@
+@font-face {
+    font-family: 'NotoSans';
+    src: url('../fonts/noto/NotoSans-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+ul.displayNone, .displayNone { display: none; }
+
+.foiv-logo img{ margin: 20px 20px 25px 0px; height: 40px}
+#exampleModalFullscreen {background: #252B34}
+
+.flag-list tr td:first-child img, #td_flag_img img { height: 40px }
+
+#example img{ max-width: 60px; }
+#example a{ text-decoration: none }
+#dt-search{width: 50%; float:left}
+#dt-search input{width: 100%; margin-bottom: 30px; font-size: 14px; padding-left: 30px; min-height: 44px}
+#dt-search #example_filter{width: 100%}
+#dt-search label {float: left; width: 100%}
+#example_length {margin-right: 25px; margin-top: 8px}
+#search-placeholder{ float: left; position: relative; top: 28px; left: 12px; font-size: 12px; color:#959EA9}
+#dt-bottom #example_paginate{float: left}
+#dt-bottom #example_length{ float: right}
+#dt-bottom {padding-top: 50px}
+.fa-trash, .fa-edit, .fa-file, .fa-file-text {font-size: 25px; color: #959EA9 !important}
+.hd1{  font-style: normal; font-weight: 600; font-size: 20px; line-height: 28px; color: #333}
+
+.sub-menu { box-shadow: rgb(245, 246, 248) 0px 2px 6px 2px;}
+.menu-plate, .submenu-plate{ float: left; margin: 16px; background: #2D343D; width: 360px; height: 240px; color: #CBCBCC; border-radius: 4px;box-shadow: 0px 2px 6px 2px #11142F1A; font-weight: 600; line-height: 34px; font-size: 24px; text-align: center; padding: 75px 20px 0px 20px}
+.submenu-plate {width: 263px; font-size: 18px; font-style: italic;}
+.menu-plate:hover, .submenu-plate:hover, .menu-plate:hover a, .submenu-plate:hover a {color: #FFF}
+.plate-sel {box-shadow: 0px 2px 6px 2px #F5F6F8}
+.plate-fake{ background: #252b34; box-shadow: 0px 0px 0px 0px #252b34; cursor: auto }
+.menu-plate a, .submenu-plate a{ text-decoration: none; color: #CBCBCC; }
+.menu-plate span.asPointer { cursor: pointer; }
+
+.psp-menu-top{ position: relative; top: 2px; font-size: 14px; border: 0xp}
+.psp-menu-top td{text-align: center; padding:0px 13px 10px 13px; white-space: nowrap}
+.psp-menu-top td a {text-decoration: none; color:  #333}
+.psp-menu-top td.active{border-bottom: 2px solid #1864AB}
+.psp-menu-top td.active a {color: #1864AB !important}
+.psp-menu-top td a:hover{ color: #1864AB}
+
+.psp-menu-left{ display:flex; flex-direction:column; padding-left:0; margin-bottom:0; border-radius:0px; margin-top:30px; overflow:hidden}
+.psp-menu-left li{ position: relative; display: block; max-height: 58px; line-height: 23px; padding: 15px 16px 15px 0px; border: 0px; border-right: 1px solid rgba(0,0,0,.125); text-align: var(--bs-body-text-align); background-color: #fff; overflow: hidden}
+.psp-menu-left li:hover{overflow-y: auto; scrollbar-width: thin}
+.psp-menu-left li a{ overflow: hidden; color: #212529; text-decoration: none}
+.psp-menu-left li:hover a {color: #1864AB}
+.psp-menu-left li.active{ border-right: 2px solid #1864AB}
+.psp-menu-left li.active a {color: #1864AB}
+
+.favor-star{height: 14px; width: 112px; border-radius: 0px; font-size: 12px; color: #959EA9; font-weight: normal}
+.favor-star i {font-size: 35px; color: #252B34; position: relative; top: 7px; margin: 0px 10px 0px 36px}
+
+.table{ background: #FFFFFF; margin-top: 25px}
+.table td{ border: 0px; background: #FFFFFF; box-shadow: inset 0px -1px 0px #E1E3E8; padding-left: 14px; height: 52px; vertical-align: middle}
+.table tr td:first-child {color: #959EA9; min-width: 250px !important}
+.table td img {max-height: 40px}

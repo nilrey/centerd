@@ -23,7 +23,18 @@ def about_page(request):
 
 def contact_page(request):
     """Страница 'Контакты'"""
-    return render(request, 'pages/contact.html')
+    if request.method == 'POST':
+        text = request.POST.get('review_text')
+        if text and len(text.strip()) > 0:
+            Review.objects.create(text=text.strip())
+            messages.success(request, 'Спасибо за ваш отзыв!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Пожалуйста, введите текст отзыва')
+    
+    # Показываем последние 3 отзыва на главной
+    recent_reviews = Review.objects.filter(is_published=True)[:3]
+    return render(request, 'pages/contact.html', {'recent_reviews': recent_reviews})
 
 def reviews_page(request):
     """Страница со всеми отзывами"""

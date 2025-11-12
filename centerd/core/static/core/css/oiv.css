@@ -1,0 +1,119 @@
+
+.dataTables_wrapper .row{
+    /*margin-top: -45px !important;*/
+}
+
+.dataTables_length{
+    margin-left: 310px !important;
+}
+.dataTables_length label{
+    float: right !important;
+}
+
+.container-fluid h5.table-header{
+    margin-bottom: -45px !important;
+    padding-top: 25px !important;
+}
+
+/*.dataTables_filter{
+    padding: 5px 0px 23px 0px !important;
+    margin-bottom: 25px !important;
+}*/
+
+.dataTable > thead > tr > th:last-child,
+.dataTable > tbody > tr > td:last-child
+{
+    text-align: center
+}
+
+.container-fluid > .dataTables_wrapper > div.row > div.col-sm-6 > .dataTables_filter:first-child{
+    /*padding: 5px 0px 23px 0px !important;*/
+    /*margin-bottom: 25px !important;*/
+}
+
+.table-director,
+.table-info,
+.table-address{
+    margin-bottom: 0px !important;
+}
+
+.table-director,
+.table-info{
+    margin-bottom: 20px !important;
+    border-bottom: 1px solid #555555;
+}
+
+.table-director td,
+.table-info td,
+.table-address td{
+	padding-left: 0px !important;
+	border: 0px !important;
+}
+
+.table-director td:first-child,
+.table-address td:first-child{
+	width: 150px !important;
+}
+
+.table-director tr:first-child td:first-child,
+.table-address tr:first-child td:first-child,
+.table-info td:first-child{
+	width: 250px !important;
+}
+
+.table-director td:last-child{
+	font-weight: 600;
+}
+
+.table-director td:last-child a,
+.table-info td:last-child a,
+.table-info tr:last-child td:last-child{
+	font-weight: 500 !important;
+}
+
+.table-director tr:last-child td:last-child{
+    height: 65px;
+}
+
+.table-director .photo-dir {
+	width: 180px;
+	padding: 0px;
+	margin: 0px;
+    margin-top: -8px;
+}
+
+.table-director tr:first-child td:first-child,
+.table-info tr:last-child td:last-child{
+    padding-bottom: 25px !important;
+}
+
+.table-info td:first-child img {
+    width: 200px !important;
+}
+
+#heraldic_img img, #flag_img img {
+    width: 80px
+}
+.tbl_oiv_fields td {
+    border-bottom: 1px solid #cdcdcd !important;
+    height: 50px !important;
+}
+.field_wraper {
+    height: 44px;
+    overflow: hidden;
+}
+.field_btn {
+    cursor: pointer;
+    font-weight: 300;
+    font-size: 12px;
+    margin: 5px 0px 10px 0px;
+    display: none
+}
+
+#structure_img img {
+    width: 100%
+}
+
+a > i.fa-trash{
+    margin-left: 20px !important;
+}
