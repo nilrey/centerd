@@ -11,6 +11,7 @@ from .utils import (
     fetch_attachment,
     fetch_message,
     fetch_recent_messages,
+    mark_message_seen,
 )
 
 
@@ -112,6 +113,9 @@ def message_detail_view(request, uid: str):
 
     try:
         mail = fetch_message(uid)
+        mark_message_seen(uid)
+        if mail:
+            mail['seen'] = True
     except MailConnectionError as exc:
         error = str(exc)
     except Exception:

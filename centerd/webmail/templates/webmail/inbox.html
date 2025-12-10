@@ -18,7 +18,7 @@
             {% for mail in messages_list %}
                 <a class="list-group-item list-group-item-action" href="{% url 'webmail:message_detail' mail.uid %}">
                     <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{ mail.subject|default:"Без темы" }}</h5>
+                        <h5 class="mb-1 {% if not mail.seen %}fw-bold{% endif %}">{{ mail.subject|default:"Без темы" }}</h5>
                         <small>{{ mail.date }}</small>
                     </div>
                     <p class="mb-1">{{ mail.from }}</p>

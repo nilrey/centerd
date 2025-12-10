@@ -98,12 +98,15 @@ def fetch_recent_messages(limit: int = None) -> List[Dict[str, str]]:
         messages = []
 
         for msg_id in reversed(recent_ids):
-            status, msg_data = client.fetch(msg_id, '(RFC822)')
+            status, msg_data = client.fetch(msg_id, '(RFC822 FLAGS)')
             if status != 'OK' or not msg_data:
                 continue
 
             raw_email = msg_data[0][1]
             msg = email.message_from_bytes(raw_email)
+
+            flags = imaplib.ParseFlags(msg_data[0][0]) if msg_data and msg_data[0] else []
+            seen = b'\\Seen' in flags
 
             subject = _decode_header_value(msg.get('Subject', 'Без темы'))
             sender = _decode_header_value(msg.get('From', 'Неизвестно'))
@@ -114,9 +117,28 @@ def fetch_recent_messages(limit: int = None) -> List[Dict[str, str]]:
                 'subject': subject,
                 'from': sender,
                 'date': date,
+                'seen': seen,
             })
 
         return messages
+    finally:
+        try:
+            client.logout()
+        except Exception:
+            pass
+
+
+def mark_message_seen(uid: str) -> None:
+    """Set \\Seen flag for a message."""
+    client = get_imap_client()
+    try:
+        status, _ = client.select(settings.WEBMAIL_INBOX_FOLDER, readonly=False)
+        if status != 'OK':
+            raise MailConnectionError("Не удалось открыть папку входящих")
+
+        status, _ = client.store(uid, '+FLAGS', '\\Seen')
+        if status != 'OK':
+            raise MailConnectionError("Не удалось пометить письмо прочитанным")
     finally:
         try:
             client.logout()
@@ -132,12 +154,15 @@ def fetch_message(uid: str) -> Dict[str, str]:
         if status != 'OK':
             raise MailConnectionError("Не удалось открыть папку входящих")
 
-        status, msg_data = client.fetch(uid, '(RFC822)')
+        status, msg_data = client.fetch(uid, '(RFC822 FLAGS)')
         if status != 'OK' or not msg_data:
             raise MailConnectionError("Не удалось получить письмо")
 
         raw_email = msg_data[0][1]
         msg = email.message_from_bytes(raw_email)
+
+        flags = imaplib.ParseFlags(msg_data[0][0]) if msg_data and msg_data[0] else []
+        seen = b'\\Seen' in flags
 
         subject = _decode_header_value(msg.get('Subject', 'Без темы'))
         sender = _decode_header_value(msg.get('From', 'Неизвестно'))
@@ -182,6 +207,7 @@ def fetch_message(uid: str) -> Dict[str, str]:
             'date': date,
             'body': body,
             'attachments': attachments,
+            'seen': seen,
         }
     finally:
         try:
