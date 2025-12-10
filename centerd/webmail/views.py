@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render
+from urllib.parse import quote
 
 from .forms import MailConnectionForm
 from .utils import (
@@ -145,5 +146,8 @@ def message_attachment_view(request, uid: str, part_id: str):
         return render(request, 'webmail/message_detail.html', {'mail': None, 'error': error})
 
     response = HttpResponse(attachment['content'], content_type=attachment['content_type'])
-    response['Content-Disposition'] = f'attachment; filename="{attachment["filename"]}"'
+    filename = attachment.get('filename') or 'attachment'
+    quoted = quote(filename)
+    ascii_fallback = filename.encode('ascii', errors='ignore').decode() or 'attachment'
+    response['Content-Disposition'] = f"attachment; filename=\"{ascii_fallback}\"; filename*=UTF-8''{quoted}"
     return response
