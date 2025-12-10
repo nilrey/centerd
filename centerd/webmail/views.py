@@ -2,10 +2,16 @@ import imaplib
 
 from django.conf import settings
 from django.contrib import messages
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from .forms import MailConnectionForm
-from .utils import fetch_recent_messages, MailConnectionError
+from .utils import (
+    MailConnectionError,
+    fetch_attachment,
+    fetch_message,
+    fetch_recent_messages,
+)
 
 
 def mail_connect_view(request):
@@ -82,7 +88,7 @@ def inbox_view(request):
     error = None
 
     try:
-        messages_list = fetch_recent_messages()
+        messages_list = fetch_recent_messages(limit=0)
     except MailConnectionError as exc:
         error = str(exc)
     except Exception:
@@ -97,3 +103,43 @@ def inbox_view(request):
         'folder': getattr(settings, 'WEBMAIL_INBOX_FOLDER', 'INBOX'),
     }
     return render(request, 'webmail/inbox.html', context)
+
+
+def message_detail_view(request, uid: str):
+    """Детальный просмотр одного письма."""
+    mail = None
+    error = None
+
+    try:
+        mail = fetch_message(uid)
+    except MailConnectionError as exc:
+        error = str(exc)
+    except Exception:
+        error = 'Произошла ошибка при получении письма'
+
+    if error:
+        messages.error(request, error)
+
+    context = {
+        'mail': mail,
+        'error': error,
+        'folder': getattr(settings, 'WEBMAIL_INBOX_FOLDER', 'INBOX'),
+    }
+    return render(request, 'webmail/message_detail.html', context)
+
+
+def message_attachment_view(request, uid: str, part_id: str):
+    """Скачивание вложения письма."""
+    try:
+        attachment = fetch_attachment(uid, part_id)
+    except MailConnectionError as exc:
+        messages.error(request, str(exc))
+        return render(request, 'webmail/message_detail.html', {'mail': None, 'error': str(exc)})
+    except Exception:
+        error = 'Произошла ошибка при получении вложения'
+        messages.error(request, error)
+        return render(request, 'webmail/message_detail.html', {'mail': None, 'error': error})
+
+    response = HttpResponse(attachment['content'], content_type=attachment['content_type'])
+    response['Content-Disposition'] = f'attachment; filename="{attachment["filename"]}"'
+    return response
