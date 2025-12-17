@@ -37,3 +37,32 @@ class MailConnectionForm(forms.Form):
         help_text='Например: INBOX, Sent, Spam',
         widget=forms.TextInput(attrs={'class': 'form-control'}),
     )
+
+
+class MultipleFileInput(forms.ClearableFileInput):
+    """Allow selecting multiple files in Django 3.x."""
+    allow_multiple_selected = True
+
+
+class ComposeEmailForm(forms.Form):
+    to = forms.EmailField(
+        label='Кому',
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'user@example.com'}),
+    )
+    subject = forms.CharField(
+        label='Тема',
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Тема письма'}),
+    )
+    body = forms.CharField(
+        label='Сообщение',
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 6, 'placeholder': 'Текст письма'}),
+    )
+    attachments = forms.FileField(
+        label='Вложения',
+        required=False,
+        widget=MultipleFileInput(attrs={'class': 'form-control', 'multiple': True}),
+        help_text='Можно выбрать несколько файлов',
+    )

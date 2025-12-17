@@ -151,9 +151,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = config('EMAIL_HOST', default='192.168.56.101')
 EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='user@example.com')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='change-me')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
+EMAIL_USE_SSL = config('EMAIL_USE_SSL', default=False, cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='test')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='12345678')
 
 # IMAP-параметры подключения (по умолчанию из запроса)
 WEBMAIL_IMAP_HOST = config('WEBMAIL_IMAP_HOST', default='192.168.56.101')

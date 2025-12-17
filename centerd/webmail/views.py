@@ -1,12 +1,16 @@
 import imaplib
+import logging
+import smtplib
+from email.message import EmailMessage
+from typing import Iterable
+from urllib.parse import quote
 
 from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponse
-from django.shortcuts import render
-from urllib.parse import quote
+from django.shortcuts import redirect, render
 
-from .forms import MailConnectionForm
+from .forms import ComposeEmailForm, MailConnectionForm
 from .utils import (
     MailConnectionError,
     fetch_attachment,
@@ -14,6 +18,52 @@ from .utils import (
     fetch_recent_messages,
     mark_message_seen,
 )
+
+logger = logging.getLogger(__name__)
+
+
+def _smtp_send_message(to_email: str, subject: str, body: str, attachments: Iterable) -> None:
+    """
+    Отправка письма через прямое подключение SMTP (без TLS/SSL),
+    по аналогии с client_smtp.py.
+    """
+    host = getattr(settings, 'EMAIL_HOST', '192.168.56.101')
+    port = getattr(settings, 'EMAIL_PORT', 25)
+    username = getattr(settings, 'EMAIL_HOST_USER', '')
+    password = getattr(settings, 'EMAIL_HOST_PASSWORD', '')
+
+    from_addr = getattr(settings, 'DEFAULT_FROM_EMAIL', None)
+    if not from_addr:
+        if '@' in username:
+            from_addr = username
+        else:
+            fallback_host = (getattr(settings, 'ALLOWED_HOSTS', ['192.168.56.101']) or ['192.168.56.101'])[0]
+            from_addr = f"{username}@{fallback_host}"
+
+    msg = EmailMessage()
+    msg['Subject'] = subject or ''
+    msg['From'] = from_addr
+    msg['To'] = to_email
+    msg.set_content(body or '')
+
+    for f in attachments or []:
+        content_type = f.content_type or 'application/octet-stream'
+        if '/' in content_type:
+            maintype, subtype = content_type.split('/', 1)
+        else:
+            maintype, subtype = 'application', 'octet-stream'
+        msg.add_attachment(
+            f.read(),
+            maintype=maintype,
+            subtype=subtype,
+            filename=f.name,
+        )
+
+    with smtplib.SMTP(host, port, timeout=15) as smtp:
+        smtp.ehlo()
+        if username:
+            smtp.login(username, password)
+        smtp.send_message(msg)
 
 
 def mail_connect_view(request):
@@ -151,3 +201,26 @@ def message_attachment_view(request, uid: str, part_id: str):
     ascii_fallback = filename.encode('ascii', errors='ignore').decode() or 'attachment'
     response['Content-Disposition'] = f"attachment; filename=\"{ascii_fallback}\"; filename*=UTF-8''{quoted}"
     return response
+
+
+def compose_view(request):
+    """Создание и отправка нового письма с несколькими вложениями."""
+    form = ComposeEmailForm(request.POST or None, request.FILES or None)
+
+    if request.method == 'POST' and form.is_valid():
+        data = form.cleaned_data
+        attachments = request.FILES.getlist('attachments')
+        try:
+            _smtp_send_message(
+                to_email=data['to'],
+                subject=data.get('subject') or '',
+                body=data.get('body') or '',
+                attachments=attachments,
+            )
+            messages.success(request, 'Письмо успешно отправлено.')
+            return redirect('webmail:inbox')
+        except Exception as exc:
+            logger.exception("Не удалось отправить письмо")
+            messages.error(request, f'Не удалось отправить письмо: {exc}')
+
+    return render(request, 'webmail/compose.html', {'form': form})
