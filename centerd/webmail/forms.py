@@ -60,9 +60,3 @@ class ComposeEmailForm(forms.Form):
         required=False,
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 6, 'placeholder': 'Текст письма'}),
     )
-    attachments = forms.FileField(
-        label='Вложения',
-        required=False,
-        widget=MultipleFileInput(attrs={'class': 'form-control', 'multiple': True}),
-        help_text='Можно выбрать несколько файлов',
-    )

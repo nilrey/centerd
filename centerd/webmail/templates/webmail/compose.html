@@ -24,10 +24,9 @@
             {% for error in form.body.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
         </div>
         <div class="mb-3">
-            <label class="form-label" for="{{ form.attachments.id_for_label }}">{{ form.attachments.label }}</label>
-            {{ form.attachments }}
-            {% if form.attachments.help_text %}<div class="form-text">{{ form.attachments.help_text }}</div>{% endif %}
-            {% for error in form.attachments.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+            <label class="form-label" for="id_attachments">Вложения</label>
+            <input type="file" name="attachments" id="id_attachments" class="form-control" multiple>
+            <div class="form-text">Можно выбрать несколько файлов</div>
         </div>
         <div class="d-flex gap-2">
             <button type="submit" class="btn btn-primary">Отправить</button>

@@ -207,20 +207,25 @@ def compose_view(request):
     """Создание и отправка нового письма с несколькими вложениями."""
     form = ComposeEmailForm(request.POST or None, request.FILES or None)
 
-    if request.method == 'POST' and form.is_valid():
-        data = form.cleaned_data
-        attachments = request.FILES.getlist('attachments')
-        try:
-            _smtp_send_message(
-                to_email=data['to'],
-                subject=data.get('subject') or '',
-                body=data.get('body') or '',
-                attachments=attachments,
-            )
-            messages.success(request, 'Письмо успешно отправлено.')
-            return redirect('webmail:inbox')
-        except Exception as exc:
-            logger.exception("Не удалось отправить письмо")
-            messages.error(request, f'Не удалось отправить письмо: {exc}')
+    if request.method == 'POST':
+        print("request.FILES:", request.FILES)
+        print("form.errors:", form.errors)
+        if not form.is_valid():
+            messages.error(request, f'Ошибки формы: {form.errors}')
+        else:
+            data = form.cleaned_data
+            attachments = request.FILES.getlist('attachments')
+            try:
+                _smtp_send_message(
+                    to_email=data['to'],
+                    subject=data.get('subject') or '',
+                    body=data.get('body') or '',
+                    attachments=attachments,
+                )
+                messages.success(request, 'Письмо успешно отправлено.')
+                return redirect('webmail:inbox')
+            except Exception as exc:
+                logger.exception("Не удалось отправить письмо")
+                messages.error(request, f'Не удалось отправить письмо: {exc}')
 
     return render(request, 'webmail/compose.html', {'form': form})
