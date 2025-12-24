@@ -6,10 +6,8 @@ from typing import Dict, List
 
 from django.conf import settings
 
-
 class MailConnectionError(Exception):
     """Raised when connection to mail server fails."""
-
 
 def _decode_header_value(raw_value: str) -> str:
     """Decode MIME encoded header parts to readable string."""
@@ -24,7 +22,6 @@ def _decode_header_value(raw_value: str) -> str:
             decoded_strings.append(part)
     return ''.join(decoded_strings)
 
-
 def _decode_filename(part, fallback: str) -> str:
     """Decode filename from attachment part, handling RFC2231 and encoded-words."""
     filename = part.get_filename()
@@ -32,22 +29,18 @@ def _decode_filename(part, fallback: str) -> str:
         decoded = _decode_header_value(filename)
         if decoded:
             return decoded
-
     # Try RFC2231 encoded filename parameters
     cd_param = part.get_param('filename', header='content-disposition')
     if cd_param:
         decoded = collapse_rfc2231_value(cd_param)
         if decoded:
             return decoded
-
     name_param = part.get_param('name')
     if name_param:
         decoded = _decode_header_value(name_param)
         if decoded:
             return decoded
-
     return fallback
-
 
 def get_imap_client() -> imaplib.IMAP4:
     """
@@ -56,7 +49,6 @@ def get_imap_client() -> imaplib.IMAP4:
     """
     host = settings.WEBMAIL_IMAP_HOST
     port = settings.WEBMAIL_IMAP_PORT
-
     try:
         if settings.WEBMAIL_IMAP_USE_SSL:
             client = imaplib.IMAP4_SSL(host, port)
@@ -64,15 +56,12 @@ def get_imap_client() -> imaplib.IMAP4:
             client = imaplib.IMAP4(host, port)
     except OSError as exc:
         raise MailConnectionError(f"Не удалось подключиться к {host}:{port}") from exc
-
     try:
         client.login(settings.WEBMAIL_IMAP_USERNAME, settings.WEBMAIL_IMAP_PASSWORD)
     except imaplib.IMAP4.error as exc:
         client.logout()
         raise MailConnectionError("Ошибка аутентификации на почтовом сервере") from exc
-
     return client
-
 
 def fetch_recent_messages(limit: int = None) -> List[Dict[str, str]]:
     """
@@ -88,30 +77,23 @@ def fetch_recent_messages(limit: int = None) -> List[Dict[str, str]]:
         status, _ = client.select(settings.WEBMAIL_INBOX_FOLDER, readonly=True)
         if status != 'OK':
             raise MailConnectionError("Не удалось открыть папку входящих")
-
         status, data = client.search(None, 'ALL')
         if status != 'OK':
             raise MailConnectionError("Не удалось получить список писем")
-
         message_ids = data[0].split()
         recent_ids = message_ids if limit <= 0 else message_ids[-limit:]
         messages = []
-
         for msg_id in reversed(recent_ids):
             status, msg_data = client.fetch(msg_id, '(RFC822 FLAGS)')
             if status != 'OK' or not msg_data:
                 continue
-
             raw_email = msg_data[0][1]
             msg = email.message_from_bytes(raw_email)
-
             flags = imaplib.ParseFlags(msg_data[0][0]) if msg_data and msg_data[0] else []
             seen = b'\\Seen' in flags
-
             subject = _decode_header_value(msg.get('Subject', 'Без темы'))
             sender = _decode_header_value(msg.get('From', 'Неизвестно'))
             date = msg.get('Date', '')
-
             messages.append({
                 'uid': msg_id.decode(),
                 'subject': subject,
@@ -119,14 +101,12 @@ def fetch_recent_messages(limit: int = None) -> List[Dict[str, str]]:
                 'date': date,
                 'seen': seen,
             })
-
         return messages
     finally:
         try:
             client.logout()
         except Exception:
             pass
-
 
 def mark_message_seen(uid: str) -> None:
     """Set \\Seen flag for a message."""
@@ -135,7 +115,6 @@ def mark_message_seen(uid: str) -> None:
         status, _ = client.select(settings.WEBMAIL_INBOX_FOLDER, readonly=False)
         if status != 'OK':
             raise MailConnectionError("Не удалось открыть папку входящих")
-
         status, _ = client.store(uid, '+FLAGS', '\\Seen')
         if status != 'OK':
             raise MailConnectionError("Не удалось пометить письмо прочитанным")
@@ -145,7 +124,6 @@ def mark_message_seen(uid: str) -> None:
         except Exception:
             pass
 
-
 def fetch_message(uid: str) -> Dict[str, str]:
     """Fetch single message by UID/sequence id."""
     client = get_imap_client()
@@ -153,21 +131,16 @@ def fetch_message(uid: str) -> Dict[str, str]:
         status, _ = client.select(settings.WEBMAIL_INBOX_FOLDER, readonly=True)
         if status != 'OK':
             raise MailConnectionError("Не удалось открыть папку входящих")
-
         status, msg_data = client.fetch(uid, '(RFC822 FLAGS)')
         if status != 'OK' or not msg_data:
             raise MailConnectionError("Не удалось получить письмо")
-
         raw_email = msg_data[0][1]
         msg = email.message_from_bytes(raw_email)
-
         flags = imaplib.ParseFlags(msg_data[0][0]) if msg_data and msg_data[0] else []
         seen = b'\\Seen' in flags
-
         subject = _decode_header_value(msg.get('Subject', 'Без темы'))
         sender = _decode_header_value(msg.get('From', 'Неизвестно'))
         date = msg.get('Date', '')
-
         body = ""
         attachments = []
         if msg.is_multipart():
@@ -176,7 +149,6 @@ def fetch_message(uid: str) -> Dict[str, str]:
                 disposition = part.get_content_disposition()
                 filename_candidate = _decode_filename(part, f'attachment-{idx}')
                 has_filename = bool(part.get_filename() or part.get_param('filename', header='content-disposition') or part.get_param('name'))
-
                 if disposition == 'attachment' or has_filename:
                     payload = part.get_payload(decode=True) or b""
                     attachments.append({
@@ -186,7 +158,6 @@ def fetch_message(uid: str) -> Dict[str, str]:
                         'size': len(payload),
                     })
                     continue
-
                 if content_type == 'text/plain' and not body:
                     charset = part.get_content_charset() or 'utf-8'
                     try:
@@ -199,7 +170,6 @@ def fetch_message(uid: str) -> Dict[str, str]:
                 body = msg.get_payload(decode=True).decode(charset, errors='replace')
             except Exception:
                 body = msg.get_payload(decode=True).decode(errors='replace')
-
         return {
             'uid': uid,
             'subject': subject,
@@ -215,7 +185,6 @@ def fetch_message(uid: str) -> Dict[str, str]:
         except Exception:
             pass
 
-
 def fetch_attachment(uid: str, part_id: str) -> Dict[str, bytes]:
     """Fetch attachment payload by UID and part index."""
     client = get_imap_client()
@@ -223,14 +192,11 @@ def fetch_attachment(uid: str, part_id: str) -> Dict[str, bytes]:
         status, _ = client.select(settings.WEBMAIL_INBOX_FOLDER, readonly=True)
         if status != 'OK':
             raise MailConnectionError("Не удалось открыть папку входящих")
-
         status, msg_data = client.fetch(uid, '(RFC822)')
         if status != 'OK' or not msg_data:
             raise MailConnectionError("Не удалось получить письмо")
-
         raw_email = msg_data[0][1]
         msg = email.message_from_bytes(raw_email)
-
         for idx, part in enumerate(msg.walk()):
             if str(idx) != str(part_id):
                 continue
@@ -246,8 +212,25 @@ def fetch_attachment(uid: str, part_id: str) -> Dict[str, bytes]:
                 'content_type': content_type,
                 'content': payload,
             }
-
         raise MailConnectionError("Вложение не найдено")
+    finally:
+        try:
+            client.logout()
+        except Exception:
+            pass
+
+def delete_messages_by_uids(uids):
+    """Удалить письма по списку uid."""
+    client = get_imap_client()
+    try:
+        status, _ = client.select(settings.WEBMAIL_INBOX_FOLDER, readonly=False)
+        if status != 'OK':
+            raise MailConnectionError('Не удалось открыть папку для удаления писем')
+        for uid in uids:
+            status, _ = client.store(uid, '+FLAGS', '\\Deleted')
+            if status != 'OK':
+                raise MailConnectionError(f'Ошибка пометки письма {uid} на удаление')
+        client.expunge()
     finally:
         try:
             client.logout()

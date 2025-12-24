@@ -17,21 +17,98 @@
     {% endif %}
 
     {% if messages_list %}
+    <form id="delete-mails-form" autocomplete="off">
+        <div class="d-flex mb-2 align-items-center">
+            <button id="delete-mails-btn" type="button" class="btn btn-link p-0 mx-2" title="Удалить выбранные письма" style="font-size:24px; color:#dc3545; opacity: 0.5; pointer-events: none;"
+                disabled>
+              <i class="fa fa-trash"></i>
+            </button>
+            <span id="delete-selected-caption" class="text-muted" style="font-size: 15px;">Удалить выбранные</span>
+        </div>
         <div class="list-group">
             {% for mail in messages_list %}
-                <a class="list-group-item list-group-item-action" href="{% url 'webmail:message_detail' mail.uid %}">
+            <div class="list-group-item d-flex align-items-center">
+                <input type="checkbox" class="form-check-input mail-checkbox me-2" value="{{ mail.uid }}" name="selected_uids">
+                <a class="flex-grow-1 list-group-item-action" href="{% url 'webmail:message_detail' mail.uid %}" style="text-decoration:none;color:inherit;">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1 {% if not mail.seen %}fw-bold{% endif %}">{{ mail.subject|default:"Без темы" }}</h5>
                         <small>{{ mail.date }}</small>
                     </div>
                     <p class="mb-1">{{ mail.from }}</p>
                 </a>
+            </div>
             {% endfor %}
         </div>
+    </form>
     {% else %}
         <div class="alert alert-info" role="alert">
             Писем не найдено.
         </div>
     {% endif %}
 </div>
+
+<script>
+// JS для чекбоксов и корзины
+$(document).ready(function() {
+    function updateDeleteBtnState() {
+        const anyChecked = $('.mail-checkbox:checked').length > 0;
+        const btn = $('#delete-mails-btn');
+        if (anyChecked) {
+            btn.prop('disabled', false);
+            btn.css({'opacity': '1', 'pointer-events': 'auto'});
+        } else {
+            btn.prop('disabled', true);
+            btn.css({'opacity': '0.5', 'pointer-events': 'none'});
+        }
+    }
+    $(document).on('change', '.mail-checkbox', function() {
+        updateDeleteBtnState();
+    });
+
+    $('#delete-mails-btn').on('click', function(e) {
+        e.preventDefault();
+        const checkedBoxes = $('.mail-checkbox:checked');
+        if (checkedBoxes.length === 0) return;
+
+        // Модальное подтверждение (bootstrap)
+        if (!window.confirm('Вы действительно хотите удалить выбранные письма?')) {
+            return;
+        }
+
+        // AJAX удаление писем
+        let uids = checkedBoxes.map(function(){ return $(this).val(); }).get();
+        // CSRF для Django
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        $.ajax({
+            url: '{% url "webmail:delete_mails" %}',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({uids: uids}),
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+            success: function(data) {
+                location.reload();
+            },
+            error: function(xhr) {
+                let msg = 'Ошибка удаления';
+                if (xhr.responseJSON && xhr.responseJSON.error) msg = xhr.responseJSON.error;
+                alert(msg);
+            }
+        });
+    });
+});
+</script>
+
 {% endblock %}

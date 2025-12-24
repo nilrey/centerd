@@ -17,6 +17,7 @@ from .utils import (
     fetch_message,
     fetch_recent_messages,
     mark_message_seen,
+    delete_messages_by_uids,
 )
 
 logger = logging.getLogger(__name__)
@@ -229,3 +230,24 @@ def compose_view(request):
                 messages.error(request, f'Не удалось отправить письмо: {exc}')
 
     return render(request, 'webmail/compose.html', {'form': form})
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+
+@csrf_exempt
+def delete_mail_view(request):
+    """Удаление писем по списку UID (POST, JSON)."""
+    if request.method != "POST":
+        return JsonResponse({'error': 'Invalid method'}, status=405)
+    try:
+        data = json.loads(request.body.decode())
+        uids = data.get('uids')
+        if not isinstance(uids, list) or not all(isinstance(x, str) for x in uids):
+            return JsonResponse({'error': 'Invalid uids'}, status=400)
+        delete_messages_by_uids(uids)
+        return JsonResponse({'ok': True})
+    except MailConnectionError as exc:
+        return JsonResponse({'error': str(exc)}, status=500)
+    except Exception as exc:
+        return JsonResponse({'error': 'Unexpected error: ' + str(exc)}, status=500)
