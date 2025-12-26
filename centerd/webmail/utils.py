@@ -1,8 +1,9 @@
 import email
 import imaplib
 from email.header import decode_header
-from email.utils import collapse_rfc2231_value
+from email.utils import collapse_rfc2231_value, parsedate_to_datetime
 from typing import Dict, List
+from datetime import datetime
 
 from django.conf import settings
 
@@ -70,6 +71,22 @@ def fetch_recent_messages(limit: int = None) -> List[Dict[str, str]]:
     If limit is 0 or negative, returns all messages.
     Returns list of dicts with uid, subject, from, date.
     """
+    # Month abbreviations in Russian
+    months_ru = {
+        'Jan': 'Янв.',
+        'Feb': 'Фев.',
+        'Mar': 'Мар.',
+        'Apr': 'Апр.',
+        'May': 'Май',
+        'Jun': 'Июн.',
+        'Jul': 'Июл.',
+        'Aug': 'Авг.',
+        'Sep': 'Сен.',
+        'Oct': 'Окт.',
+        'Nov': 'Ноя.',
+        'Dec': 'Дек.',
+    }
+
     if limit is None:
         limit = settings.WEBMAIL_MAX_MESSAGES
     client = get_imap_client()
@@ -93,7 +110,16 @@ def fetch_recent_messages(limit: int = None) -> List[Dict[str, str]]:
             seen = b'\\Seen' in flags
             subject = _decode_header_value(msg.get('Subject', 'Без темы'))
             sender = _decode_header_value(msg.get('From', 'Неизвестно'))
-            date = msg.get('Date', '')
+            date_str = msg.get('Date', '')
+            try:
+                date_obj = parsedate_to_datetime(date_str)
+                formatted_date = date_obj.strftime('%H:%M:%S %d %b %Y')
+                # Replace English month abbreviations with Russian
+                for eng, rus in months_ru.items():
+                    formatted_date = formatted_date.replace(eng, rus)
+                date = formatted_date
+            except (ValueError, TypeError):
+                date = date_str  # fallback to original
             messages.append({
                 'uid': msg_id.decode(),
                 'subject': subject,

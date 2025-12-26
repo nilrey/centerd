@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block title %}Новое письмо{% endblock %}
 
@@ -34,5 +35,36 @@
         </div>
     </form>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header {% if error_message %}bg-danger text-white{% elif success_message %}bg-light{% endif %}">
+                <h5 class="modal-title" id="messageModalLabel">Уведомление</h5>
+                <button type="button" class="btn-close {% if error_message %}btn-close-white{% endif %}" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalMessage">
+                {% if success_message %}
+                    {{ success_message }}
+                {% elif error_message %}
+                    {{ error_message }}
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    {% if success_message or error_message %}
+        $('#messageModal').modal('show');
+    {% endif %}
+});
+</script>
+
 {% endblock %}
 

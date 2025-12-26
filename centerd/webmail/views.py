@@ -207,12 +207,14 @@ def message_attachment_view(request, uid: str, part_id: str):
 def compose_view(request):
     """Создание и отправка нового письма с несколькими вложениями."""
     form = ComposeEmailForm(request.POST or None, request.FILES or None)
+    success_message = None
+    error_message = None
 
     if request.method == 'POST':
         print("request.FILES:", request.FILES)
         print("form.errors:", form.errors)
         if not form.is_valid():
-            messages.error(request, f'Ошибки формы: {form.errors}')
+            error_message = f'Ошибки формы: {form.errors}'
         else:
             data = form.cleaned_data
             attachments = request.FILES.getlist('attachments')
@@ -223,13 +225,17 @@ def compose_view(request):
                     body=data.get('body') or '',
                     attachments=attachments,
                 )
-                messages.success(request, 'Письмо успешно отправлено.')
-                return redirect('webmail:inbox')
+                success_message = 'Письмо успешно отправлено.'
+                form = ComposeEmailForm()  # Очистить форму
             except Exception as exc:
                 logger.exception("Не удалось отправить письмо")
-                messages.error(request, f'Не удалось отправить письмо: {exc}')
+                error_message = f'Не удалось отправить письмо: {exc}'
 
-    return render(request, 'webmail/compose.html', {'form': form})
+    return render(request, 'webmail/compose.html', {
+        'form': form,
+        'success_message': success_message,
+        'error_message': error_message,
+    })
 
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
