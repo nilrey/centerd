@@ -4,10 +4,43 @@
 {% block title %}Почта{% endblock %}
 
 {% block content %}
+<style>
+#mails-table thead th {
+    border: none !important;
+}
+#mails-table th, #mails-table td {
+    text-align: left !important;
+    padding-left: 15px !important;
+}#mails-table th:nth-child(1), #mails-table td:nth-child(1) {
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+}
+#mails-table th:nth-child(2), #mails-table td:nth-child(2) {
+    width: 60% !important;
+}
+#mails-table th:nth-child(3), #mails-table td:nth-child(3) {
+    width: 250px !important;
+}
+#mails-table th:nth-child(4), #mails-table td:nth-child(4) {
+    width: 250px !important;
+}.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_paginate {
+    margin-top: 30px !important;
+}
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 30px !important;
+}
+.dataTables_wrapper .dataTables_filter input {
+    min-width: 500px !important;
+    margin-left: 10px;
+}
+</style>
 <div class="container" style="margin-top: 30px;">
     <h2>Электронная почта</h2>
     <div class="d-flex justify-content-between align-items-center h-100px" style="height: 100px;">
-        <p class="text-muted mb-0">Показаны {{ messages_list|length }} писем из {{ folder }}</p>
+        <p class="text-muted mb-0">Писем в {{ folder }}: {{ messages_list|length }}</p>
         <div>
             <a class="btn btn-primary" href="{% url 'webmail:compose' %}" style="margin-right: 25px;">Создать письмо</a>
             <button id="delete-mails-btn" type="button" class="btn btn-secondary" title="Удалить выбранные письма" disabled>
@@ -57,23 +90,24 @@ $(document).ready(function() {
     $('#mails-table').DataTable({
         "language": {
             "processing": "Подождите...",
-            "lengthMenu": "Показать _MENU_ записей",
-            "zeroRecords": "Записи отсутствуют.",
-            "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
-            "infoEmpty": "Записи с 0 до 0 из 0 записей",
-            "infoFiltered": "(отфильтровано из _MAX_ записей)",
+            "lengthMenu": "Показать _MENU_ писем",
+            "zeroRecords": "Письма отсутствуют.",
+            "info": "Письма с _START_ до _END_ из _TOTAL_ ",
+            "infoEmpty": "Писем 0",
+            "infoFiltered": "(отфильтровано из _MAX_ писем)",
             "search": "Поиск:",
             "paginate": {
-                "first": "Первая",
-                "previous": "Предыдущая",
+                "first": "Начало",
+                "previous": "Назад",
                 "next": "Следующая",
-                "last": "Последняя"
+                "last": "Конец"
             },
             "aria": {
                 "sortAscending": ": активировать для сортировки столбца по возрастанию",
                 "sortDescending": ": активировать для сортировки столбцов по убыванию"
             }
         },
+        "dom": "ifrtlp",
         "columnDefs": [
             { "orderable": false, "targets": 0 }  // Отключить сортировку для чекбоксов
         ],
