@@ -7,6 +7,8 @@
 <style>
 #mails-table thead th {
     border: none !important;
+    font-size: 16px !important;
+    font-weight: normal !important;
 }
 #mails-table th, #mails-table td {
     text-align: left !important;
@@ -62,11 +64,11 @@
             </thead>
             <tbody>
                 {% for mail in messages_list %}
-                <tr>
+                <tr {% if not mail.seen %}class="fw-bold"{% endif %}>
                     <td><input type="checkbox" class="form-check-input mail-checkbox" value="{{ mail.uid }}" name="selected_uids"></td>
                     <td>
                         <a href="{% url 'webmail:message_detail' mail.uid %}" style="text-decoration:none;color:inherit;">
-                            <strong {% if not mail.seen %}class="fw-bold"{% endif %}>{{ mail.subject|default:"Без темы" }}</strong>
+                            {{ mail.subject|default:"Без темы" }}
                         </a>
                     </td>
                     <td>{{ mail.from }}</td>
