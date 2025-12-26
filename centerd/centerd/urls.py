@@ -17,12 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('pages.urls')),  # включаем URLs из приложения pages
-    path('organizations/', include('organizations.urls')),
+    path('', RedirectView.as_view(url='/mail/inbox/', permanent=False)),
     path('mail/', include('webmail.urls', namespace='webmail')),
+    path('foivs/', include('pages.urls', namespace='pages'))
 ]
 
 # Поддержка медиа-файлов в режиме разработки

@@ -16,13 +16,13 @@
         <div class="menu-plate" onclick="manageSubmenu('SubMenuLine1', this)"><span class="asPointer">Паспорта ФОИВ РФ /
             Субьектов РФ</span></div>
             <div class="menu-plate"><a href="/mail">Электронная почта</a></div>
-            <div class="menu-plate"><a href="/webftp">Служба передачи файлов (FTP)</a></div>
+            <div class="menu-plate"><a href="#" data-bs-toggle="modal" data-bs-target="#ftpModal">Служба передачи файлов (FTP)</a></div>
         <!-- <div class="menu-plate" onclick="manageSubmenu('SubMenuLine4', this)"><span class="asPointer">Контроль и управление
             функционированием</span></div> -->
         <!-- <div class="menu-plate"><a href="http://192.168.125.182/?login=open" target="_blank">ГИС МО</a></div> -->
       </div>
       <div id="SubMenuLine1" class="sub-menu" style="margin: 0px auto; display: none; max-width: 1180px">
-        <div class="submenu-plate"><a href="/">ФОИВ РФ</a></div>
+        <div class="submenu-plate"><a href="/foivs">ФОИВ РФ</a></div>
         <!-- <div class="submenu-plate"><a href="/public/index.php/region">Субьекты РФ</a></div> -->
         <!-- <div class="submenu-plate"><a href="/public/index.php/stat">Статистика</a></div> -->
         <!-- <div class="submenu-plate"><a href="/public/index.php/search">Поиск в паспортах ФОИВ РФ и Субъектов РФ</a></div> --> -->
@@ -150,6 +150,26 @@
     </div>
   </div>
   <!-- \ Modal Help Info -->
+
+<!-- Modal FTP -->
+<div class="modal fade" id="ftpModal" tabindex="-1" aria-labelledby="ftpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="ftpModalLabel">Уведомление</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Данный функционал находится в разработке
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- \ Modal FTP -->
+
 <script type="text/javascript">
     function modalHelp(){
         var modal = new bootstrap.Modal(document.getElementById('dialog-modal-help'), {});
