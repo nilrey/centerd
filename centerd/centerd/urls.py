@@ -23,7 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='/mail/inbox/', permanent=False)),
     path('mail/', include('webmail.urls', namespace='webmail')),
-    path('foivs/', include('pages.urls', namespace='pages'))
 ]
 
 # Поддержка медиа-файлов в режиме разработки
