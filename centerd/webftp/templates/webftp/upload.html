@@ -1,0 +1,122 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}WebFTP — загрузка файла{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 30px; max-width: 800px;">
+    <h2>Загрузка файла (WebFTP)</h2>
+    <p class="text-muted">Сохранение файла на сервере с указанием псевдонима, описания и списка пользователей с доступом.</p>
+
+    <div class="mb-3">
+        <a class="btn btn-secondary" href="{% url 'webftp:file_list' %}">← Вернуться к списку файлов</a>
+    </div>
+    <form id="webftp-upload-form" method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="{{ form.file.id_for_label }}" class="form-label"><strong>{{ form.file.label }} *</strong></label>
+            {{ form.file }}
+            {% if form.file.errors %}
+                <div class="text-danger small">{{ form.file.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.alias.id_for_label }}" class="form-label"><strong>{{ form.alias.label }}</strong></label>
+            {{ form.alias }}
+            <div class="form-text">Если оставить пустым, псевдоним будет автоматически получен из имени файла (без расширения) с трансформацией русских букв в английские.</div>
+            {% if form.alias.errors %}
+                <div class="text-danger small">{{ form.alias.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.description.id_for_label }}" class="form-label"><strong>{{ form.description.label }}</strong></label>
+            {{ form.description }}
+            {% if form.description.errors %}
+                <div class="text-danger small">{{ form.description.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.allowed_usernames.id_for_label }}" class="form-label"><strong>{{ form.allowed_usernames.label }}</strong></label>
+            {{ form.allowed_usernames }}
+            <div class="form-text">Укажите логины пользователей через запятую. Данное поле необязательно.</div>
+            {% if form.allowed_usernames.errors %}
+                <div class="text-danger small">{{ form.allowed_usernames.errors }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Сохранить файл</button>
+    </form>
+</div>
+
+<script>
+// Простейшая транслитерация русских букв в английские на стороне клиента
+function transliterateRuToEn(text) {
+    const map = {
+        'а':'a','б':'b','в':'v','г':'g','д':'d',
+        'е':'e','ё':'e','ж':'zh','з':'z','и':'i',
+        'й':'y','к':'k','л':'l','м':'m','н':'n',
+        'о':'o','п':'p','р':'r','с':'s','т':'t',
+        'у':'u','ф':'f','х':'h','ц':'c','ч':'ch',
+        'ш':'sh','щ':'sch','ъ':'','ы':'y','ь':'',
+        'э':'e','ю':'yu','я':'ya'
+    };
+    let result = '';
+    for (let ch of text) {
+        const lower = ch.toLowerCase();
+        if (map[lower] !== undefined) {
+            let repl = map[lower];
+            if (ch === ch.toUpperCase()) {
+                // Простое капитализирование
+                if (repl.length > 0) {
+                    repl = repl[0].toUpperCase() + repl.slice(1);
+                }
+            }
+            result += repl;
+        } else {
+            result += ch;
+        }
+    }
+    return result;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('webftp-upload-form');
+    const fileInput = document.getElementById('{{ form.file.id_for_label }}');
+    const aliasInput = document.getElementById('{{ form.alias.id_for_label }}');
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            if (!aliasInput || aliasInput.value.trim() !== '') {
+                return;
+            }
+            const fullPath = fileInput.value.split('\\').pop().split('/').pop();
+            const dotIndex = fullPath.lastIndexOf('.');
+            let nameWithoutExt = fullPath;
+            if (dotIndex > 0) {
+                nameWithoutExt = fullPath.substring(0, dotIndex);
+            }
+            aliasInput.value = transliterateRuToEn(nameWithoutExt);
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            // JS-проверка обязательного поля "Добавить файл"
+            if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                e.preventDefault();
+                alert('Пожалуйста, выберите файл для загрузки.');
+                return false;
+            }
+            return true;
+        });
+    }
+});
+</script>
+
+{% endblock %}
+
+

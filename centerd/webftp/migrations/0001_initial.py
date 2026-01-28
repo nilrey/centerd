@@ -1,0 +1,46 @@
+from django.db import migrations, models
+
+
+def create_webftp_schema(apps, schema_editor):
+    """Создаёт схему webftp в базе eif_db, если она ещё не существует."""
+    schema_editor.execute('CREATE SCHEMA IF NOT EXISTS webftp;')
+
+
+def drop_webftp_schema(apps, schema_editor):
+    """Откат: удаляет схему webftp вместе с объектами (использовать осторожно)."""
+    schema_editor.execute('DROP SCHEMA IF EXISTS webftp CASCADE;')
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [
+    ]
+
+    operations = [
+        migrations.RunPython(create_webftp_schema, drop_webftp_schema),
+        migrations.CreateModel(
+            name='WebFtpFile',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('file', models.FileField(upload_to='', verbose_name='Файл')),
+                ('alias', models.CharField(blank=True, max_length=255, verbose_name='Псевдоним файла')),
+                ('description', models.TextField(blank=True, verbose_name='Описание файла')),
+                ('original_name', models.CharField(max_length=255, verbose_name='Оригинальное имя файла')),
+                ('extension', models.CharField(blank=True, max_length=50, verbose_name='Расширение файла')),
+                ('content_type', models.CharField(blank=True, max_length=255, verbose_name='MIME-тип')),
+                ('size', models.BigIntegerField(null=True, verbose_name='Размер файла (байт)')),
+                ('allowed_usernames', models.TextField(blank=True, verbose_name='Пользователи с доступом (логины через запятую)')),
+                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Дата загрузки')),
+                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Дата изменения')),
+            ],
+            options={
+                'db_table': 'webftp.webftp_files',
+                'verbose_name': 'Файл WebFTP',
+                'verbose_name_plural': 'Файлы WebFTP',
+            },
+        ),
+    ]
+
+

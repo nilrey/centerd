@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',      # Базовые компоненты
     'webmail',   # Почтовый модуль
+    'webftp',    # Работа с файлами через веб-интерфейс
 ]
 
 MIDDLEWARE = [
@@ -137,6 +138,13 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Media files (user uploads)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Путь к файловому хранилищу для модуля WebFTP
+# Можно переопределить через переменную окружения WEBFTP_STORAGE_ROOT
+from pathlib import Path as _Path
+WEBFTP_STORAGE_ROOT = _Path(
+    config('WEBFTP_STORAGE_ROOT', default=str(BASE_DIR / 'webftp'))
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
