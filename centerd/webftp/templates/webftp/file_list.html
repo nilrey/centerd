@@ -49,6 +49,7 @@
                     <th>Описание</th>
                     <th>Пользователи с доступом</th>
                     <th>Дата загрузки</th>
+                    <th style="width: 80px; min-width: 80px; max-width: 80px; text-align: center;">Действия</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,6 +75,14 @@
                         <td>{{ f.description|default_if_none:""|truncatechars:80 }}</td>
                         <td>{{ f.allowed_usernames|default:"-" }}</td>
                         <td>{{ f.created_at|date:"d.m.Y H:i" }}</td>
+                        <td style="text-align: center;">
+                            <form method="post" action="{% url 'webftp:delete' f.id %}" style="display:inline;" onsubmit="return confirm('Вы действительно хотите удалить этот файл?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link p-0 m-0" title="Удалить файл" style="color:#dc3545;">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

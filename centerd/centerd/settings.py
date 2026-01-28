@@ -143,7 +143,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Можно переопределить через переменную окружения WEBFTP_STORAGE_ROOT
 from pathlib import Path as _Path
 WEBFTP_STORAGE_ROOT = _Path(
-    config('WEBFTP_STORAGE_ROOT', default=str(BASE_DIR / 'webftp'))
+    config('WEBFTP_STORAGE_ROOT', default=str(BASE_DIR / 'webftp/uploads/'))
 )
 
 # Default primary key field type

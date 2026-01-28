@@ -5,6 +5,7 @@ from .views import (
     webftp_file_list_view,
     webftp_download_view,
     webftp_file_detail_view,
+    webftp_delete_view,
 )
 
 app_name = 'webftp'
@@ -14,4 +15,5 @@ urlpatterns = [
     path('files/', webftp_file_list_view, name='file_list'),
     path('files/<int:pk>/', webftp_file_detail_view, name='detail'),
     path('files/<int:pk>/download/', webftp_download_view, name='download'),
+    path('files/<int:pk>/delete/', webftp_delete_view, name='delete'),
 ]

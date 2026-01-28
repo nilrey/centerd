@@ -4,6 +4,8 @@ from typing import Dict
 from django.contrib import messages
 from django.http import FileResponse, Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+
+from django.db import models
 from django.utils.encoding import force_str
 
 from .forms import WebFtpFileForm
@@ -161,3 +163,40 @@ def webftp_file_detail_view(request: HttpRequest, pk: int) -> HttpResponse:
         'file_obj': obj,
     }
     return render(request, 'webftp/file_detail.html', context)
+
+
+def webftp_delete_view(request: HttpRequest, pk: int) -> HttpResponse:
+    """
+    Удаление файла: запись в БД и физический файл на диске.
+    Доступно только по POST и только для пользователей, имеющих доступ к файлу.
+    """
+    obj = get_object_or_404(WebFtpFile, pk=pk)
+    if not _user_has_access(request, obj):
+        raise Http404("Файл не найден")
+
+    if request.method != 'POST':
+        return redirect('webftp:file_list')
+
+    # Сначала удаляем физический файл, затем запись
+    if obj.file:
+        # Удаление через storage
+        storage = obj.file.storage
+        name = obj.file.name
+        if name and storage.exists(name):
+            storage.delete(name)
+        # Дополнительная попытка удалить файл по физическому пути, если он существует
+        try:
+            file_path = obj.file.path
+        except (ValueError, AttributeError):
+            file_path = None
+        if file_path:
+            import os
+            if os.path.exists(file_path):
+                try:
+                    os.remove(file_path)
+                except OSError:
+                    # Если не удалось удалить, просто продолжаем удаление записи
+                    pass
+    obj.delete()
+    messages.success(request, 'Файл успешно удалён.')
+    return redirect('webftp:file_list')
