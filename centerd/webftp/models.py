@@ -50,7 +50,7 @@ class WebFtpFile(models.Model):
     )
 
     class Meta:
-        db_table = 'webftp.webftp_files'
+        db_table = 'webftp_files'
         verbose_name = 'Файл WebFTP'
         verbose_name_plural = 'Файлы WebFTP'
 
