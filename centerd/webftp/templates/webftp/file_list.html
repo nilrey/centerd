@@ -1,9 +1,17 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block title %}WebFTP — мои файлы{% endblock %}
+{% block title %}Служба передачи файлов (WebFTP){% endblock %}
 
 {% block content %}
+<script>
+    {% if messages %}
+        {% for message in messages %}
+            alert('{{ message }}');
+        {% endfor %}
+    {% endif %}
+</script>
+
 <style>
 #webftp-files-table thead th {
     border: none !important;

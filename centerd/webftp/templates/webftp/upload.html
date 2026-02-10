@@ -4,6 +4,24 @@
 {% block title %}WebFTP — загрузка файла{% endblock %}
 
 {% block content %}
+        <!-- Модальное окно Bootstrap для успешной загрузки -->
+        <div class="modal fade" id="uploadSuccessModal" tabindex="-1" aria-labelledby="uploadSuccessModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="uploadSuccessModalLabel">Успех</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        Файл успешно загружен
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 <div class="container" style="margin-top: 30px; max-width: 800px;">
     <h2>Загрузка файла</h2>
     <p class="text-muted">Сохранение файла на сервере с указанием псевдонима, описания и списка пользователей с доступом.</p>
@@ -73,32 +91,22 @@
     </form>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header {% if error_message %}bg-danger text-white{% elif success_message %}bg-light{% endif %}">
-                <h5 class="modal-title" id="notificationModalLabel">Уведомление</h5>
-                <button type="button" class="btn-close {% if error_message %}btn-close-white{% endif %}" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="modalMessage">
-                {% if success_message %}
-                    {{ success_message }}
-                {% elif error_message %}
-                    {{ error_message }}
-                {% endif %}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-            </div>
-        </div>
-    </div>
-</div>
+
+
 
 <script>
 $(document).ready(function() {
-    {% if success_message or error_message %}
-        $('#"dialog-modal-info').modal('show');
+    {% if messages %}
+        {% for message in messages %}
+            {% if 'success' in message.tags %}
+                if (typeof bootstrap !== 'undefined') {
+                    var modal = new bootstrap.Modal(document.getElementById('uploadSuccessModal'));
+                    modal.show();
+                } else {
+                    $('#uploadSuccessModal').modal('show');
+                }
+            {% endif %}
+        {% endfor %}
     {% endif %}
 });
 </script>

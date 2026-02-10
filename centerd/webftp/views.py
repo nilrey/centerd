@@ -4,6 +4,8 @@ from typing import Dict
 from django.http import FileResponse, Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
+from django.contrib import messages
+
 from django.db import models
 from django.utils.encoding import force_str
 
@@ -76,14 +78,13 @@ def webftp_upload_view(request: HttpRequest) -> HttpResponse:
             instance.alias = alias
 
             instance.save()
-            success_message = 'Файл успешно загружен.'
+            messages.success(request, 'Файл успешно загружен.')
             form = WebFtpFileForm()  # Очистить форму
         else:
             error_message = f'Ошибки формы: {form.errors}'
 
     context: Dict[str, object] = {
         'form': form,
-        'success_message': success_message,
         'error_message': error_message,
     }
     return render(request, 'webftp/upload.html', context)

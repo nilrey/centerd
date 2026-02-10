@@ -51,6 +51,23 @@
         </div>
     </div>
 
+        <!-- Модальное окно Bootstrap для успешного удаления -->
+        <div class="modal fade" id="deleteSuccessModal" tabindex="-1" aria-labelledby="deleteSuccessModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-secondary text-white">
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        Сообщение успешно удалено
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     {% if messages_list %}
     <form id="delete-mails-form" autocomplete="off">
         <table id="mails-table" class="table table-striped table-bordered" style="width:100%">
@@ -171,7 +188,13 @@ $(document).ready(function() {
             data: JSON.stringify({uids: uids}),
             headers: { 'X-CSRFToken': getCookie('csrftoken') },
             success: function(data) {
-                location.reload();
+                // Показываем модальное окно Bootstrap
+                if (typeof bootstrap !== 'undefined') {
+                    var modal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
+                    modal.show();
+                } else {
+                    $('#deleteSuccessModal').modal('show');
+                }
             },
             error: function(xhr) {
                 let msg = 'Ошибка удаления';
