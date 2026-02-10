@@ -60,8 +60,15 @@
 
 <script>
 $(document).ready(function() {
-    {% if success_message or error_message %}
-        $('#messageModal').modal('show');
+    message = '';
+    {% if success_message %}
+        message = '{{ success_message }}';
+    {% elif error_message %}
+        message = '{{ error_message }}';
+    {% endif %}
+    {% if message %}
+        $('#dialog-msg-info').html(message);
+        $('#dialog-modal-info').modal('show');
     {% endif %}
 });
 </script>

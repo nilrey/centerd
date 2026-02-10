@@ -1,7 +1,6 @@
 import os
 from typing import Dict
 
-from django.contrib import messages
 from django.http import FileResponse, Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -51,8 +50,11 @@ def webftp_upload_view(request: HttpRequest) -> HttpResponse:
     Форма загрузки файла на сервер с сохранением метаданных.
     Обязательное поле: файл.
     """
+    form = WebFtpFileForm(request.POST or None, request.FILES or None)
+    success_message = None
+    error_message = None
+
     if request.method == 'POST':
-        form = WebFtpFileForm(request.POST, request.FILES)
         if form.is_valid():
             instance = form.save(commit=False)
 
@@ -74,13 +76,15 @@ def webftp_upload_view(request: HttpRequest) -> HttpResponse:
             instance.alias = alias
 
             instance.save()
-            messages.success(request, 'Файл успешно загружен.')
-            return redirect('webftp:upload')
-    else:
-        form = WebFtpFileForm()
+            success_message = 'Файл успешно загружен.'
+            form = WebFtpFileForm()  # Очистить форму
+        else:
+            error_message = f'Ошибки формы: {form.errors}'
 
     context: Dict[str, object] = {
         'form': form,
+        'success_message': success_message,
+        'error_message': error_message,
     }
     return render(request, 'webftp/upload.html', context)
 

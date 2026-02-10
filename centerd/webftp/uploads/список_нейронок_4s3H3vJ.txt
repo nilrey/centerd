@@ -1,0 +1,16 @@
+yolov8x-pose 
+yolov8m 
+yolov12
+u-net
+InceptionNet 
+osnet_ain_x1.0
+DeepLab-v3+
+FCN-8s
+Face recognition
+
+backbones:
+ResNet
+VGG16
+MobileNet
+EfficientNet
+

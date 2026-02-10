@@ -5,52 +5,103 @@
 
 {% block content %}
 <div class="container" style="margin-top: 30px; max-width: 800px;">
-    <h2>Загрузка файла (WebFTP)</h2>
+    <h2>Загрузка файла</h2>
     <p class="text-muted">Сохранение файла на сервере с указанием псевдонима, описания и списка пользователей с доступом.</p>
 
-    <div class="mb-3">
-        <a class="btn btn-secondary" href="{% url 'webftp:file_list' %}">← Вернуться к списку файлов</a>
-    </div>
-    <form id="webftp-upload-form" method="post" enctype="multipart/form-data" novalidate>
+    <form id="webftp-upload-form" method="post" enctype="multipart/form-data" novalidate class="mt-3">
         {% csrf_token %}
+    <table cellpadding="5">
+        <tr>
+            <td nowrap>
+                <label class="form-label" for="{{ form.file.id_for_label }}">{{ form.file.label }} *</label>                
+            </td>
+            <td>
+                {{ form.file }}
+                {% if form.file.help_text %}<div class="form-text">{{ form.file.help_text }}</div>{% endif %}
+                {% for error in form.file.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td nowrap>
+                <label class="form-label" for="{{ form.alias.id_for_label }}">{{ form.alias.label }}</label>
+            </td>
+            <td>
+                    {{ form.alias }}
+                    <div class="form-text">Если оставить пустым, псевдоним будет автоматически получен из имени файла (без расширения) с трансформацией русских букв в английские.</div>
+            {% for error in form.alias.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="form-label" for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+            </td>
+            <td>
+                {{ form.description }}
+                {% if form.description.help_text %}<div class="form-text">{{ form.description.help_text }}</div>{% endif %}
+                {% for error in form.description.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}                    
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="form-label" for="{{ form.allowed_usernames.id_for_label }}">{{ form.allowed_usernames.label }}</label>
+            </td>
+            <td>
+                {{ form.allowed_usernames }}
+                <div class="form-text">Укажите логины пользователей через запятую. Данное поле необязательно.</div>
+                {% for error in form.allowed_usernames.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Сохранить файл</button>
+                    <a class="btn btn-secondary ml30" href="{% url 'webftp:file_list' %}">Вернуться к списку файлов</a>
+                </div> 
+            </td>
+        </tr>
+    </table> 
 
         <div class="mb-3">
-            <label for="{{ form.file.id_for_label }}" class="form-label"><strong>{{ form.file.label }} *</strong></label>
-            {{ form.file }}
-            {% if form.file.errors %}
-                <div class="text-danger small">{{ form.file.errors }}</div>
-            {% endif %}
+            
         </div>
 
         <div class="mb-3">
-            <label for="{{ form.alias.id_for_label }}" class="form-label"><strong>{{ form.alias.label }}</strong></label>
-            {{ form.alias }}
-            <div class="form-text">Если оставить пустым, псевдоним будет автоматически получен из имени файла (без расширения) с трансформацией русских букв в английские.</div>
-            {% if form.alias.errors %}
-                <div class="text-danger small">{{ form.alias.errors }}</div>
-            {% endif %}
+            
+            
         </div>
 
-        <div class="mb-3">
-            <label for="{{ form.description.id_for_label }}" class="form-label"><strong>{{ form.description.label }}</strong></label>
-            {{ form.description }}
-            {% if form.description.errors %}
-                <div class="text-danger small">{{ form.description.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="mb-3">
-            <label for="{{ form.allowed_usernames.id_for_label }}" class="form-label"><strong>{{ form.allowed_usernames.label }}</strong></label>
-            {{ form.allowed_usernames }}
-            <div class="form-text">Укажите логины пользователей через запятую. Данное поле необязательно.</div>
-            {% if form.allowed_usernames.errors %}
-                <div class="text-danger small">{{ form.allowed_usernames.errors }}</div>
-            {% endif %}
-        </div>
-
-        <button type="submit" class="btn btn-primary">Сохранить файл</button>
     </form>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header {% if error_message %}bg-danger text-white{% elif success_message %}bg-light{% endif %}">
+                <h5 class="modal-title" id="notificationModalLabel">Уведомление</h5>
+                <button type="button" class="btn-close {% if error_message %}btn-close-white{% endif %}" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalMessage">
+                {% if success_message %}
+                    {{ success_message }}
+                {% elif error_message %}
+                    {{ error_message }}
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    {% if success_message or error_message %}
+        $('#"dialog-modal-info').modal('show');
+    {% endif %}
+});
+</script>
 
 <script>
 // Простейшая транслитерация русских букв в английские на стороне клиента
